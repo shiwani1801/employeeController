@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table
 @Data
@@ -19,6 +21,10 @@ public class Employee {
     private long salary;
     private String notes;
     private String startDate;
+    @ElementCollection
+    @CollectionTable(name = "department_table",joinColumns = @JoinColumn(name = "id"))
+    @Column
+    private List<String> department;
     public Employee(EmployeeDTO employeeDTO){
         this.name=employeeDTO.getName();
         this.profilePic=employeeDTO.getProfilePic();
@@ -26,5 +32,6 @@ public class Employee {
         this.salary=employeeDTO.getSalary();
         this.notes=employeeDTO.getNotes();
         this.startDate=employeeDTO.getStartDate();
+        this.department=employeeDTO.getDepartment();
     }
 }

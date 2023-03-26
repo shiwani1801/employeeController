@@ -1,6 +1,7 @@
 package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDTO;
+import com.example.employee.exception.EmployeeException;
 import com.example.employee.model.Employee;
 import com.example.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class EmployeeService implements IEmployeeService {
         Optional<Employee>employee=repository.findById(id);
         if(employee.isPresent()){
             return employee;
-        }return null;
+        }throw new EmployeeException("id is not present");
+
     }
     @Override
     public List<Employee> allDetails() {
@@ -42,16 +44,22 @@ public class EmployeeService implements IEmployeeService {
             employee.setSalary(employeeDTO.getSalary());
             employee.setNotes(employeeDTO.getNotes());
             employee.setStartDate(employeeDTO.getStartDate());
+            employee.setDepartment(employeeDTO.getDepartment());
             repository.save(employee);
+            return employee;
         }
 
-        return null;
+        throw new EmployeeException("invalid id");
     }
-
+@Override
     public String delete(int id) {
         repository.deleteById(id);
         return "data fetched by id is deleted";
     }
-
+    @Override
+    public List<Employee> getByDepartment(String department){
+        List<Employee>employees=repository.findByDepartment(department);
+        return employees;
+    }
 
 }
